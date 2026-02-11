@@ -44,6 +44,8 @@ logs/
 *.log
 pids/
 *.pid
+spring.log
+spring.log.*
 
 ############################################################
 # ===== UPLOADS / STORAGE =====
@@ -59,6 +61,8 @@ tmp/
 *.sqlite
 *.sqlite3
 *.db
+*.h2.db
+*.mv.db
 
 ############################################################
 # ===== MAVEN =====
@@ -70,6 +74,7 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 dependency-reduced-pom.xml
+buildNumber.properties
 
 ############################################################
 # ===== GRADLE =====
@@ -85,6 +90,41 @@ dependency-reduced-pom.xml
 *.war
 *.ear
 hs_err_pid*
+*.log
+
+############################################################
+# ===== IDEs =====
+############################################################
+# IntelliJ IDEA
+*.iml
+*.iws
+*.ipr
+out/
+.idea/
+
+# Eclipse
+.settings/
+bin/
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+*.nb-gradle/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.vscode/.java/
+
+# History / backups
+.history/
 
 ############################################################
 # ===== .NET / VISUAL STUDIO =====
@@ -211,21 +251,7 @@ vite.svg
 .prettier-cache
 
 ############################################################
-# ===== EDITORES =====
-############################################################
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-!.vscode/*.code-snippets
-
-.history/
-.idea/
-*.iml
-
-############################################################
-# ===== PYTHON (POR SI HAY HERRAMIENTAS AUXILIARES) =====
+# ===== PYTHON =====
 ############################################################
 __pycache__/
 *.pyc
@@ -275,43 +301,3 @@ MSBuild_Logs/
 .healthchecksdb
 MigrationBackup/
 FodyWeavers.xsd
-
-# Maven build output
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-pom.xml.next
-release.properties
-dependency-reduced-pom.xml
-buildNumber.properties
-
-# Eclipse
-.settings/
-bin/
-
-# IntelliJ IDEA
-out/
-*.iws
-*.iml
-*.ipr
-
-# NetBeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-*.nb-gradle/
-
-# VS Code Java Extensions
-.vscode/.java/
-
-# Spring Boot specific
-spring.log
-spring.log.*
-
-# Logs
-*.log
-hs_err_pid*
-
