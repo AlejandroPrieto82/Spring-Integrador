@@ -1,13 +1,13 @@
-package eci.edu.healt;
+package eci.edu.health;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HealtApplication {
+public class HealthApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HealtApplication.class, args);
+		SpringApplication.run(HealthApplication.class, args);
 	}
 
 }
