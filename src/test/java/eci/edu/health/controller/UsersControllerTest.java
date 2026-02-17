@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +21,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import eci.edu.health.security.JwtRequestFilter;
+import eci.edu.health.security.CustomUserDetailsService;
+import eci.edu.health.security.JwtUtil;
+
 @WebMvcTest(UsersController.class)
+@AutoConfigureMockMvc(addFilters = false) // 🔥 DESACTIVA SEGURIDAD
 public class UsersControllerTest {
 
     @Autowired
@@ -29,11 +35,21 @@ public class UsersControllerTest {
     @MockBean
     private UsersService usersService;
 
+    @MockBean
+    private JwtRequestFilter jwtRequestFilter;
+
+    @MockBean
+    private CustomUserDetailsService customUserDetailsService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
     private User user;
 
     @BeforeEach
     void setUp() {
-        user = new User("1", "Juan", "Pérez", "juan@mail.com");
+        user = new User("1", "Juan", "Pérez",
+                "juan@mail.com", null, null);
     }
 
     // ─── POST ────────────────────────────────────────────────
@@ -61,7 +77,9 @@ public class UsersControllerTest {
 
     @Test
     void getAll_ShouldReturn200AndList() throws Exception {
-        User user2 = new User("2", "María", "García", "maria@mail.com");
+        User user2 = new User("2", "María", "García",
+                "maria@mail.com", null, null);
+
         when(usersService.findAll()).thenReturn(Arrays.asList(user, user2));
 
         mockMvc.perform(get("/users"))
@@ -104,7 +122,9 @@ public class UsersControllerTest {
 
     @Test
     void update_WhenExists_ShouldReturn200AndUpdatedUser() throws Exception {
-        User updated = new User("1", "Juan Actualizado", "López", "juannuevo@mail.com");
+        User updated = new User("1", "Juan Actualizado",
+                "López", "juannuevo@mail.com", null, null);
+
         when(usersService.update(eq("1"), any(User.class))).thenReturn(updated);
 
         mockMvc.perform(put("/users/1")

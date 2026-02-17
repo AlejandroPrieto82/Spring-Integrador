@@ -30,7 +30,8 @@ public class UsersServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User("1", "Juan", "Pérez", "juan@mail.com");
+        user = new User("1", "Juan", "Pérez",
+                "juan@mail.com", null, null);
     }
 
     // ─── SAVE ────────────────────────────────────────────────
@@ -82,7 +83,9 @@ public class UsersServiceTest {
 
     @Test
     void findAll_ShouldReturnAllUsers() {
-        User user2 = new User("2", "María", "García", "maria@mail.com");
+        User user2 = new User("2", "María", "García",
+                "maria@mail.com", null, null);
+
         when(userRepository.findAll()).thenReturn(Arrays.asList(user, user2));
 
         List<User> result = usersService.findAll();
@@ -106,7 +109,9 @@ public class UsersServiceTest {
 
     @Test
     void update_WhenUserExists_ShouldReturnUpdatedUser() {
-        User updated = new User(null, "Juan Actualizado", "López", "juannuevo@mail.com");
+        User updated = new User(null, "Juan Actualizado",
+                "López", "juannuevo@mail.com", null, null);
+
         when(userRepository.findById("1")).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
