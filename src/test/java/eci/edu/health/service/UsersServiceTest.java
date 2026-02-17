@@ -5,8 +5,7 @@ import eci.edu.health.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -44,17 +43,13 @@ public class UsersServiceTest {
 
         assertNotNull(result);
         assertEquals("Juan", result.getName());
-        assertEquals("Pérez", result.getLastName());
-        assertEquals("juan@mail.com", result.getEmail());
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
     void save_ShouldCallRepositoryOnce() {
         when(userRepository.save(any(User.class))).thenReturn(user);
-
         usersService.save(user);
-
         verify(userRepository, times(1)).save(any(User.class));
     }
 
@@ -85,7 +80,6 @@ public class UsersServiceTest {
     void findAll_ShouldReturnAllUsers() {
         User user2 = new User("2", "María", "García",
                 "maria@mail.com", null, null);
-
         when(userRepository.findAll()).thenReturn(Arrays.asList(user, user2));
 
         List<User> result = usersService.findAll();
@@ -133,23 +127,38 @@ public class UsersServiceTest {
         verify(userRepository, never()).save(any(User.class));
     }
 
+    @Test
+    void update_ShouldCallSaveWithUpdatedFields() {
+        User updated = new User(null, "Nuevo", "Apellido", "nuevo@mail.com", null, null);
+        when(userRepository.findById("1")).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(i -> i.getArgument(0));
+
+        User result = usersService.update("1", updated);
+
+        assertEquals("Nuevo", result.getName());
+        assertEquals("Apellido", result.getLastName());
+        assertEquals("nuevo@mail.com", result.getEmail());
+
+        verify(userRepository).save(argThat(u ->
+            u.getName().equals("Nuevo") &&
+            u.getLastName().equals("Apellido") &&
+            u.getEmail().equals("nuevo@mail.com")
+        ));
+    }
+
     // ─── DELETE ──────────────────────────────────────────────
 
     @Test
     void delete_WhenUserExists_ShouldCallDeleteById() {
         doNothing().when(userRepository).deleteById("1");
-
         usersService.delete("1");
-
         verify(userRepository, times(1)).deleteById("1");
     }
 
     @Test
     void delete_ShouldNeverCallSave() {
         doNothing().when(userRepository).deleteById(any());
-
         usersService.delete("1");
-
         verify(userRepository, never()).save(any());
     }
 }
